@@ -113,7 +113,8 @@ class NovelTagPipline(object):
                     print(e)
 
         r_title_id = int(self.redis.hget("articles_h", title))
-        if r_title_id != -1 or r_title_id != 0:
+        # print("rti", r_title_id)
+        if r_title_id not in (-1, 0, 1):
             article_id = r_title_id
         else:
             # start_time = time.time()
@@ -126,6 +127,8 @@ class NovelTagPipline(object):
             # if not article_id:
             #     return
             self.redis.hset("articles_h", title, article_id)
+
+        # print(article_id)
 
         sql_chapter = "insert into articles_chapter(article_id, chapter_id, chapter_name, updated_at, chapter_sort) " \
                       "values(%s, %s, %s, %s, %s)"
