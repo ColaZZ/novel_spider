@@ -131,7 +131,7 @@ class NovelTagSpider(RedisSpider):
             author = tdd[2].xpath('text()').extract_first(default=" ")
             words = tdd[3].xpath('text()').extract_first(default=" ")
             status = tdd[5].xpath('a/text()').extract_first(default=" ")
-            # print(article_url, len(article_url))
+            print(status)
 
             if status == "连载中":
                 is_full = 0
@@ -161,7 +161,7 @@ class NovelTagSpider(RedisSpider):
 
         next_page = response.xpath('//div[@class="pagelink"]/a[@class="next"]/@href').extract_first()
         current_page = response.xpath('//div[@class="pagelink"]/strong/text()').extract_first()
-        print(response.meta['category'], "current_page", current_page)
+        # print(response.meta['category'], "current_page", current_page)
         if next_page and next_page <= "130":
             next_page = self.start_urls[0] + next_page
             yield Request(next_page, meta=meta_start, callback=self.parse_tag_detail)
@@ -172,7 +172,7 @@ class NovelTagSpider(RedisSpider):
         head_list = response.xpath(
             '//head/meta[@property="og:description"]/@content | //head/meta[@property="og:image"]/@content').extract()
 
-        menu_list_group = [menu_list[i:i + 4] for i in range(0, len(menu_list), 4)]
+        menu_list_group = [menu_list[i:i + 2] for i in range(0, len(menu_list), 2)]
 
         # 单例模式
         # ml = menu_list_group[0]
@@ -211,6 +211,7 @@ class NovelTagSpider(RedisSpider):
         #  'thumb': 'http://www.35kushu.com/35zwimage/70/70881/70881s.jpg'}
 
         for index, ml in enumerate(menu_list_group):
+            # print(ml)
             chapter_url_base = ml[0]
             chapter_name = ml[1]
             # # type(result) == "list"
@@ -273,4 +274,4 @@ class NovelTagSpider(RedisSpider):
         # print(item['chapter_sort'], type(item['chapter_sort']))
         # print(item['chapter_url_base'])
 
-        yield item
+        # yield item
