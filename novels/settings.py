@@ -107,7 +107,7 @@ SCHEDULER_PERSIST = True
 SCHEDULER_QUEUE_CLASS = 'scrapy_redis.queue.SpiderPriorityQueue'
 
 # redis 使用的端口和地址
-REDIS_HOST = '47.244.114.115'
+REDIS_HOST = '47.56.7.182'
 REDIS_PORT = 6379
 REDIS_DB = 1
 # redis字符集设定
