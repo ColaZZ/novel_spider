@@ -94,29 +94,29 @@ ITEM_PIPELINES = {
 
 LOG_LEVEL = 'WARNING'
 
-# 过滤器
-DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
-
-# 调度器
-SCHEDULER = "scrapy_redis.scheduler.Scheduler"
-
-# 调度状态持久化
-SCHEDULER_PERSIST = True
-
-# 请求调度使用优先队列
-SCHEDULER_QUEUE_CLASS = 'scrapy_redis.queue.SpiderPriorityQueue'
+# # 过滤器
+# DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
+#
+# # 调度器
+# SCHEDULER = "scrapy_redis.scheduler.Scheduler"
+#
+# # 调度状态持久化
+# SCHEDULER_PERSIST = True
+#
+# # 请求调度使用优先队列
+# SCHEDULER_QUEUE_CLASS = 'scrapy_redis.queue.SpiderPriorityQueue'
 
 # redis 使用的端口和地址
-REDIS_HOST = '47.56.7.182'
-REDIS_PORT = 6379
-REDIS_DB = 1
-# redis字符集设定
-REDIS_ENCODING = 'utf8'
-
-
-
-# REDIS_HOST = '127.0.0.1'
+# REDIS_HOST = '47.56.7.182'
 # REDIS_PORT = 6379
 # REDIS_DB = 1
-# #redis字符集设定
+# # redis字符集设定
 # REDIS_ENCODING = 'utf8'
+
+
+
+REDIS_HOST = '127.0.0.1'
+REDIS_PORT = 6379
+REDIS_DB = 1
+#redis字符集设定
+REDIS_ENCODING = 'utf8'
