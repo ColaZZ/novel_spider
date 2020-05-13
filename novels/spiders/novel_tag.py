@@ -61,7 +61,6 @@ class NovelTagSpider(scrapy.Spider):
             }
             # 下一步
             yield Request(tag_url, meta=copy.deepcopy(meta), callback=self.parse_tag_detail)
-            break
 
     def parse_tag_detail(self, response):
         # 传入上层meta
@@ -82,7 +81,6 @@ class NovelTagSpider(scrapy.Spider):
             meta["thumb"] = thumb
             meta["article_url_base"] = article_url[20:]
             yield Request(article_url, meta=meta, callback=self.parse_menu)
-            break
 
         next_page = response.xpath('//div[@class="pagelink"]/a[@class="next"]/@href').extract_first(default=' ')
         current_page = response.xpath('//div[@class="pagelink"]/strong/text()').extract_first(default=' ')
@@ -100,7 +98,7 @@ class NovelTagSpider(scrapy.Spider):
                                            '//div[@class="ml_content"]//div[@class="zb"]//div[@class="newest"]//div[@class="last9"]/ul/li/a/text()').extract()
         last_chapter = last_chapter_list[1]
         lastest_chapter_id = last_chapter_list[0][:-5]
-        print(last_chapter, lastest_chapter_id)
+        # print(last_chapter, lastest_chapter_id)
 
         if status == "连载中":
             is_full = 0
@@ -145,7 +143,6 @@ class NovelTagSpider(scrapy.Spider):
             meta['is_full'] = is_full
 
             yield Request(chapter_url, meta=meta, callback=self.parse_content)
-            break
 
     def parse_content(self, response):
         content = response.xpath('//div[@class="novelcontent"]/p[@class="articlecontent"]/text()').extract()
