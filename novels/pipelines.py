@@ -23,7 +23,7 @@ class NovelTagPipline(object):
         # self.conn = pymysql.connect(host='127.0.0.1', user='root',
         #                             passwd='mima123', db='distributed_spider', charset='utf8')
         self.conn = pymysql.connect(host='47.56.7.182', user='root', port=3306,
-                                    passwd='Fik2mcKWThRbEFyx', db='distributed_spider', charset='utf8')
+                                    passwd='Fik2mcKWThRbEFyx', db='novel_spider_2.0', charset='utf8')
         self.cur = self.conn.cursor()
     #
         redis_pool = redis.ConnectionPool(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB, decode_responses=True)  # redis缓存连接池
