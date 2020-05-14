@@ -84,9 +84,8 @@ class NovelTagSpider(scrapy.Spider):
 
         next_page = response.xpath('//div[@class="pagelink"]/a[@class="next"]/@href').extract_first(default=' ')
         current_page = response.xpath('//div[@class="pagelink"]/strong/text()').extract_first(default=' ')
-        # print(response.meta['category'], "current_page", current_page)
-        # if next_page:
-        #     yield Request(next_page, meta=meta_start, callback=self.parse_tag_detail)
+        if next_page:
+            yield Request(next_page, meta=meta_start, callback=self.parse_tag_detail)
 
     def parse_menu(self, response):
         menu_list = response.xpath('//div[@class="ml_content"]//div[@class="ml_list"]/ul/li/a/@href | '
