@@ -10,6 +10,8 @@ import time
 import pymysql
 import redis
 
+import requests
+
 from .settings import REDIS_HOST, REDIS_PORT, REDIS_DB
 
 
@@ -87,7 +89,13 @@ class NovelTagPipline(object):
         if article_len < 10:
             self.redis.hmset("acrticle_cache", articles_dict)
 
-
+        # cur_path = "/mnt/d" + os.path.sep + allowed_domain
+        cur_path = "/volume/novel_context" + os.path.sep + allowed_domain
+        target_path = cur_path + os.path.sep + str(category_id) + os.path.sep + temp_path
+        filename_path = cur_path + os.path.sep + str(category_id) + os.path.sep + temp_path + os.path.sep + \
+                        str(chapter_url_base[:-5]) + '.txt'
+        thumb_target_path = cur_path + os.path.sep + "thumb"
+        thumb_filename_path = cur_path + os.path.sep + "thumb" + os.path.sep + chapter_url_base + ".jpg"
 
         if not self.redis.hexists("articles_h", title):
             sql = "insert into articles(title, pinyin, author, url, category_id, category, " \
@@ -95,7 +103,7 @@ class NovelTagPipline(object):
                   "values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)  "
             try:
                 self.cur.execute(sql, (title, int(temp_path), author, url, category_id, category,
-                                       is_full, is_full, info, thumb, updated_at, last_chapter, int(lastest_chapter_id)))
+                                       is_full, is_full, info, thumb_filename_path, updated_at, last_chapter, int(lastest_chapter_id)))
                 self.conn.commit()
                 self.redis.hset("articles_h", title, -1)
             except Exception as e:
@@ -125,17 +133,26 @@ class NovelTagPipline(object):
 
 
         # # linux路径
-        # cur_path = "/mnt/d" + os.path.sep + allowed_domain
-        cur_path = "/volume/novel_context" + os.path.sep + allowed_domain
-        target_path = cur_path + os.path.sep + str(category_id) + os.path.sep + temp_path
-        filename_path = cur_path + os.path.sep + str(category_id) + os.path.sep + temp_path + os.path.sep + \
-                        str(chapter_url_base[:-5]) + '.txt'
-
-        # print(target_path, filename_path)
         if not os.path.exists(target_path):
             os.makedirs(target_path)
         with open(filename_path, 'w', encoding='utf-8') as f:
             f.write(item['chapter_content'])
+
+        # 保存thumb图片
+
+        if thumb:
+            thumb_path = filename_path
+        else:
+            thumb_path = ""
+        r = requests.get(thumb, stream=True)
+
+        if r.status_code != 404 and thumb_path:
+            if not os.path.exists(thumb_target_path):
+                os.makedirs(thumb_target_path)
+            with open(thumb_filename_path, 'wb') as f:
+                for chunk in r.iter_content():
+                    f.write(chunk)
+
         return item
 
     def close_spider(self, spider):
